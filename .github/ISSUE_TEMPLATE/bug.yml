@@ -1,0 +1,35 @@
+name: Bug
+description: Something that works differently from what it should.
+labels: [bug]
+projects: ["Migas99/2"]
+body:
+  - type: textarea
+    id: what-happens
+    attributes:
+      label: What happens
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should happen
+    validations:
+      required: true
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: How to reproduce
+      description: The steps, and the smallest handbook or input that shows it.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The output of `handbook version`, or the commit.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References

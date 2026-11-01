@@ -1,0 +1,71 @@
+# The checks every pull request runs (CONTRIBUTING.md, "Checks"). Each rule of Compliance is a step, and
+# every step runs and reports, even after another one fails.
+name: Pull request
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  compliance:
+    name: Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Title is a Conventional Commit
+        if: ${{ !cancelled() }}
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: python3 scripts/compliance.py title "$TITLE"
+
+      - name: Description follows the standard
+        if: ${{ !cancelled() }}
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: python3 scripts/compliance.py description <<<"$BODY"
+
+      - name: Commits have no co-authors or attribution
+        if: ${{ !cancelled() }}
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: git log --format='%B' "$BASE..$HEAD" | python3 scripts/compliance.py attribution "A commit message"
+
+      - name: No agent tool or vendor names
+        if: ${{ !cancelled() }}
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+          BRANCH: ${{ github.head_ref }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          names() { python3 scripts/compliance.py names "$1" <<<"$2" || found=1; }
+          found=0
+          names "The title" "$TITLE"
+          names "The description" "$BODY"
+          names "The branch name" "$BRANCH"
+          names "A commit message" "$(git log --format='%B' "$BASE..$HEAD")"
+          # compliance.py is where the list of names is written down.
+          names "An added line" "$(git diff "$BASE...$HEAD" -- . ':(exclude)scripts/compliance.py' | grep '^+' | grep -v '^+++' || true)"
+          exit "$found"
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Test the rules of the Compliance check
+        run: python3 -m unittest discover --start-directory tests
