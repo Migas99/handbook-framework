@@ -45,4 +45,4 @@ Keep the issue and the project current as the work moves. Nobody else will.
 | `scripts/compliance.py` | The rules of the Compliance check |
 | `tests/` | The tests of those rules |
 | `.github/` | Issue forms, the pull request template, code owners and the checks |
-| `docs/adr/` | Decision records |
+| `docs/` | Concepts, guides, reference and decision records ([documentation](CONTRIBUTING.md#documentation)) |
