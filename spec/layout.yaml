@@ -1,0 +1,51 @@
+# The files and folders of a handbook, at the root of its repository.
+#
+# required:  whether every handbook has it.
+# generated: who writes it, when not its owner.
+
+layout:
+  - path: handbook.toml
+    type: file
+    required: true
+    description: The handbook's configuration (schemas/handbook.schema.json).
+
+  - path: handbook.lock
+    type: file
+    required: true
+    generated: handbook upgrade
+    description: The checksums of the pinned framework release, for each platform.
+
+  - path: handbook
+    type: file
+    required: true
+    description: The launcher, run as ./handbook, which runs the pinned framework release.
+
+  - path: README.md
+    type: file
+    required: false
+    description: The owner's introduction to their handbook.
+
+  - path: <domain>/
+    type: folder
+    required: false
+    description: >-
+      One folder per enabled domain, named by its code, with one file per item, <domain>/<slug>.md. The
+      path follows the item's ID.
+
+  - path: data/
+    type: folder
+    required: false
+    description: Tables that reference items are generated from, through their source.
+
+  - path: commands/
+    type: folder
+    required: false
+    description: The handbook's own commands, named by procedures through their command.
+
+  - path: generated/
+    type: folder
+    required: true
+    generated: handbook build
+    description: >-
+      Everything handbook build produces, committed so that reviews show what agents receive; handbook
+      check fails when it is out of date.

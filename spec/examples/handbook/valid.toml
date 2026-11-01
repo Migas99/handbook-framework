@@ -1,0 +1,16 @@
+[handbook]
+name = "Example Company"
+prefix = "example"
+framework = "0.1.0"
+
+[domains]
+enabled = ["design", "code", "languages", "architecture"]
+
+[[domains.extensions]]
+code = "media-formats"
+family = "system"
+definition = "The formats content is published in, and how each is handled."
+belongs_when = "It is about a specific content format."
+
+[core]
+warn_above_words = 600

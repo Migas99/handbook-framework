@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "item.schema.json",
+  "title": "Item frontmatter",
+  "description": "The frontmatter of an item: the fields every kind has, the fields of each kind, and the statuses each kind allows (docs/adr/item-metadata-and-meaningful-ids.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "title", "summary", "status"],
+  "properties": {
+    "id": {"$ref": "common.schema.json#/$defs/id"},
+    "kind": {"enum": ["principle", "working-agreement", "rule", "guideline", "procedure", "reference", "decision"]},
+    "title": {"$ref": "common.schema.json#/$defs/text"},
+    "summary": {"description": "What it says, in one line.", "$ref": "common.schema.json#/$defs/text"},
+    "applies_when": {"description": "When an agent should read it, in one line.", "$ref": "common.schema.json#/$defs/text"},
+    "status": {"enum": ["draft", "proposed", "active", "accepted", "superseded", "deprecated"]},
+    "because": {"description": "The principles or decisions that justify it.", "$ref": "common.schema.json#/$defs/ids"},
+    "related": {"$ref": "common.schema.json#/$defs/ids"},
+    "aliases": {"description": "Its former IDs.", "$ref": "common.schema.json#/$defs/ids"},
+    "enforced_by": {"description": "The check, hook or permission that enforces the rule.", "$ref": "common.schema.json#/$defs/text"},
+    "date": {"description": "When the decision was made.", "type": "string", "format": "date"},
+    "decided_in": {"description": "Where the decision was discussed.", "$ref": "common.schema.json#/$defs/text"},
+    "supersedes": {"$ref": "common.schema.json#/$defs/ids"},
+    "superseded_by": {"$ref": "common.schema.json#/$defs/id"},
+    "command": {"description": "The command that does the procedure's mechanical steps.", "$ref": "common.schema.json#/$defs/text"},
+    "source": {"description": "The table the reference's facts are generated from.", "type": "string", "pattern": "^data/.+\\.yaml$"}
+  },
+  "allOf": [
+    {"if": {"required": ["enforced_by"]}, "then": {"properties": {"kind": {"const": "rule"}}}},
+    {"if": {"required": ["command"]}, "then": {"properties": {"kind": {"const": "procedure"}}}},
+    {"if": {"required": ["source"]}, "then": {"properties": {"kind": {"const": "reference"}}}},
+    {
+      "if": {"anyOf": [{"required": ["date"]}, {"required": ["decided_in"]}, {"required": ["supersedes"]}, {"required": ["superseded_by"]}]},
+      "then": {"properties": {"kind": {"const": "decision"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "decision"}}},
+      "then": {
+        "required": ["date"],
+        "properties": {"status": {"enum": ["proposed", "accepted", "superseded", "deprecated"]}}
+      },
+      "else": {
+        "properties": {"status": {"enum": ["draft", "proposed", "active", "deprecated"]}}
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "superseded"}}, "required": ["status"]},
+      "then": {"required": ["superseded_by"]}
+    },
+    {
+      "if": {"properties": {"kind": {"enum": ["principle", "working-agreement"]}}},
+      "then": {"not": {"required": ["applies_when"]}}
+    },
+    {
+      "if": {"properties": {"kind": {"enum": ["rule", "guideline", "procedure"]}}},
+      "then": {"required": ["applies_when"]}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "rule"}}},
+      "then": {"required": ["enforced_by"]}
+    }
+  ]
+}
