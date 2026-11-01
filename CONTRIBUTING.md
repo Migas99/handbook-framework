@@ -111,6 +111,34 @@ scripts/compliance.py description < description.md
 python3 -m unittest discover --start-directory tests
 ```
 
+## Documentation
+Documentation changes in the same pull request as the change it describes.
+
+| Where | For | Holds |
+|---|---|---|
+| `README.md` | A first visit | A short entry point: what a handbook is, how it works, an example, a quick start, common questions with example answers, and links to the rest |
+| `docs/concepts/` | Understanding | What a handbook is, the kinds of item, families and tiers, how agent tools receive a handbook |
+| `docs/guides/` | Getting things done | Creating a handbook, writing each kind with worked examples, running the checks in a CI system, installing into a workspace, upgrading |
+| `docs/reference/` | Exact facts | The spec, `handbook.toml`, the commands, the agent-tool adapters |
+| `docs/adr/` | Why | One record per decision ([Decisions](#decisions)) |
+| A `README.md` next to each part of the code | Changing the code | How the part's pieces connect |
+
+- Each folder's `README.md` lists its pages.
+- A fact with a machine-readable source is generated from it, never written by hand: the reference pages
+  that list the spec's fields come from its schemas, and the command reference from each command's help.
+- Short pages, one topic per page, in plain language. Rules are stated definitively, with an example where
+  it makes them clearer.
+
+### Diagrams
+A diagram is added when it shows how several parts connect, or a flow with more than a couple of steps
+or branches. Two parts and an arrow, or a list, stay as text.
+
+- Diagrams are written in [Mermaid](https://mermaid.js.org), in the Markdown, next to the text they
+  explain.
+- The type fits what is shown: a flowchart for parts and how they connect, a sequence diagram for
+  interactions over time, a state diagram for a lifecycle.
+- A change that makes a diagram wrong fixes it in the same pull request.
+
 ## Decisions
 A significant decision is recorded in `docs/adr/<short-title>.md`, named by its title in kebab-case,
 without a number. Each record has a status (`proposed`, `accepted`, `superseded by <record>`,
