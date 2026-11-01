@@ -1,0 +1,124 @@
+# The domains the framework defines (docs/adr/domains-by-family-tier-and-topic.md). Every item belongs
+# to exactly one domain, given by the prefix of its ID.
+#
+# family: practice (how we work and build) or system (what one particular system is).
+# tier:   core (in every handbook) or standard (enabled per handbook in handbook.toml). Handbooks
+#         declare their own extension domains in handbook.toml, with the same fields.
+# belongs_when: the membership test.
+
+domains:
+  - code: meta
+    name: Meta
+    family: practice
+    tier: core
+    definition: How this handbook works and changes.
+    belongs_when: It is about the handbook itself.
+
+  - code: collaboration
+    name: Collaboration
+    family: practice
+    tier: core
+    definition: How agents work with the owner, such as autonomy, asking, communicating and recording.
+    belongs_when: It would still apply if the task were not software.
+
+  - code: delivery
+    name: Delivery
+    family: practice
+    tier: core
+    definition: >-
+      How a change moves from intent to merged and released, such as work items, branches, commits,
+      pull requests, review, checks and versions.
+    belongs_when: It is about moving a change, not about its content.
+
+  - code: quality
+    name: Quality
+    family: practice
+    tier: core
+    definition: How we know a change is right, such as testing, verification and the definition of done.
+    belongs_when: It is about evidence that something works.
+
+  - code: knowledge
+    name: Knowledge
+    family: practice
+    tier: core
+    definition: >-
+      How things are written down, such as documentation, decision records, diagrams, terminology and
+      writing style.
+    belongs_when: Its output is text for people or agents to read.
+
+  - code: design
+    name: Design
+    family: practice
+    tier: standard
+    definition: >-
+      The default shapes of systems and their contracts, such as architecture styles, APIs, events, data
+      modelling, identifiers and value formats.
+    belongs_when: It affects more than one module, or another party.
+
+  - code: code
+    name: Code
+    family: practice
+    tier: standard
+    definition: >-
+      How code is written in any language, such as structure, naming, comments, errors, configuration,
+      command-line behavior and dependencies.
+    belongs_when: It is about source inside a component, whatever the language.
+
+  - code: languages
+    name: Languages
+    family: practice
+    tier: standard
+    definition: >-
+      How each language or framework meets the other domains, such as toolchains, idioms and the
+      settings of its checks.
+    belongs_when: It only makes sense for one language or framework.
+
+  - code: security
+    name: Security
+    family: practice
+    tier: standard
+    definition: Protecting secrets, data, access and the supply chain.
+    belongs_when: Getting it wrong means exposure or compromise.
+
+  - code: environment
+    name: Environment
+    family: practice
+    tier: standard
+    definition: Where work happens, such as the development machine, toolchains and the agents' sandbox.
+    belongs_when: It is about the workstation and its tools, not the product.
+
+  - code: operations
+    name: Operations
+    family: practice
+    tier: standard
+    definition: How software is run, such as infrastructure as code, deployment, observability and incidents.
+    belongs_when: It is about software after it is merged.
+
+  - code: product
+    name: Product
+    family: system
+    tier: standard
+    definition: What the system is for, such as its vision, users, goals and non-goals.
+    belongs_when: It explains why the system exists.
+
+  - code: domain-model
+    name: Domain model
+    family: system
+    tier: standard
+    definition: The business language and its boundaries, such as the glossary, contexts and their relationships.
+    belongs_when: It names or bounds a business concept.
+
+  - code: architecture
+    name: Architecture
+    family: system
+    tier: standard
+    definition: The actual system, such as its views, components, flows and deployment.
+    belongs_when: It describes this system, where design holds the general defaults.
+
+# When the membership tests of several domains pass, the first in this order wins.
+tie_break:
+  [languages, security, meta, collaboration, delivery, quality, knowledge, design, code, environment,
+   operations, product, domain-model, architecture]
+
+# Folders at the root of a handbook, next to the domain folders, so no domain may use their names.
+reserved_codes: [data, commands, generated]

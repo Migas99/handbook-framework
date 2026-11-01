@@ -1,0 +1,21 @@
+# How items are identified, and how skill names are derived from IDs
+# (docs/adr/item-metadata-and-meaningful-ids.md). The patterns of a code, an ID and a prefix are in
+# schemas/common.schema.json; the rules below span files, and handbook check enforces them.
+
+id:
+  format: <domain>.<slug>
+  rules:
+    - The domain is the code of a framework or extension domain the handbook enables.
+    - The slug is plain English words, without invented abbreviations.
+    - An ID is unique in the handbook, and an alias never equals an existing ID.
+    - An ID is never reused. An item that no longer applies is deprecated or superseded, never deleted.
+    - A renamed item lists its former IDs in aliases. A reference to an alias resolves, with a warning.
+
+skill_names:
+  # Skill names allow only lowercase letters, digits and hyphens, so the dot of an ID becomes a hyphen.
+  domain: <prefix>-<domain>
+  procedure: <prefix>-<domain>-<slug>
+  max_length: 64
+  rules:
+    - Every skill name is at most max_length characters.
+    - No two skills of a handbook have the same name.

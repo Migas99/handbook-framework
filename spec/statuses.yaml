@@ -1,0 +1,30 @@
+# The statuses an item can have. Which kinds can have which status is in schemas/item.schema.json.
+#
+# reaches_agents: whether agents receive items with this status. Items that no longer apply are never
+# deleted, so their IDs are never reused (docs/adr/item-metadata-and-meaningful-ids.md); they stop
+# reaching agents instead.
+
+statuses:
+  - code: draft
+    meaning: The text is unfinished; what it says may still change.
+    reaches_agents: false
+
+  - code: proposed
+    meaning: Not decided; a starting point for discussion.
+    reaches_agents: false
+
+  - code: active
+    meaning: Current; what it says applies.
+    reaches_agents: true
+
+  - code: accepted
+    meaning: Decided; it applies until another decision supersedes it.
+    reaches_agents: true
+
+  - code: superseded
+    meaning: Replaced by a later decision, which it names in superseded_by.
+    reaches_agents: false
+
+  - code: deprecated
+    meaning: No longer applies, and nothing replaces it.
+    reaches_agents: false

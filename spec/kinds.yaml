@@ -1,0 +1,104 @@
+# The seven kinds of item (docs/adr/seven-kinds-of-item.md) and their body sections
+# (docs/adr/fixed-body-sections-per-kind.md). The fields and statuses each kind allows in its frontmatter
+# are in schemas/item.schema.json.
+#
+# loaded: when an agent receives the item.
+#   always          in the always-on core
+#   when-applies    when its applies_when matches the task, through its domain's skill
+#   as-skill        as a skill of its own, through its applies_when
+#   on-lookup       when looked up, through the index
+#   when-asked-why  when someone asks why, or proposes a change
+# core_sections: the sections that go into the always-on core, and count towards its size.
+
+kinds:
+  - code: principle
+    name: Principle
+    definition: A value that guides judgment where nothing more specific applies.
+    binding: Always applies; how is a judgment call.
+    loaded: always
+    core_sections: [Principle, Reason]
+    sections:
+      - {name: Principle, required: true}
+      - {name: Reason, required: true}
+      - {name: In practice, required: false}
+
+  - code: working-agreement
+    name: Working agreement
+    definition: How an agent behaves while working with the owner.
+    binding: Non-negotiable, and no tool can check it.
+    loaded: always
+    core_sections: [Agreement, Reason]
+    sections:
+      - {name: Agreement, required: true}
+      - {name: Reason, required: true}
+
+  - code: rule
+    name: Rule
+    definition: A requirement that a check, hook or permission enforces.
+    binding: Non-negotiable; the tool that enforces it is the backstop.
+    loaded: when-applies
+    sections:
+      - {name: Rule, required: true}
+      - {name: Reason, required: true}
+      - {name: When it fails, required: true}
+      - {name: Examples, required: false}
+
+  - code: guideline
+    name: Guideline
+    definition: A default, with its reason.
+    binding: Followed unless a case calls for something else, with the reason stated.
+    loaded: when-applies
+    sections:
+      - {name: Guideline, required: true}
+      - {name: Reason, required: true}
+      - {name: Examples, required: false}
+
+  - code: procedure
+    name: Procedure
+    definition: Steps to reach a result. Mechanical steps belong in its command, judgment in its text.
+    binding: Followed when doing that task.
+    loaded: as-skill
+    sections:
+      - {name: Outcome, required: true}
+      - {name: Before you start, required: true}
+      - {name: Steps, required: true}
+      - {name: Done when, required: true}
+
+  - code: reference
+    name: Reference
+    definition: Facts that are looked up, such as registries, glossaries and tables.
+    binding: Facts.
+    loaded: on-lookup
+    sections:
+      - {name: About, required: true}
+      # Generated from the item's source when it has one, or written inline.
+      - {name: Facts, required: true}
+
+  - code: decision
+    name: Decision
+    definition: A choice among alternatives at a point in time, with its context.
+    binding: Explains why, and never instructs. The items it created or changed state what to do.
+    loaded: when-asked-why
+    sections:
+      - {name: Context, required: true}
+      - {name: Decision, required: true}
+      # Names, by ID, the items the decision created or changed.
+      - {name: Consequences, required: true}
+      - {name: Alternatives considered, required: true}
+
+# How to classify a statement: the first question answered yes gives its kind.
+classification:
+  - question: Does it record a choice made at a point in time, with alternatives?
+    kind: decision
+  - question: Is it a sequence of steps that produces a result?
+    kind: procedure
+  - question: Is it a fact or entry that people look up?
+    kind: reference
+  - question: Is it binding without exceptions, and can a tool enforce it?
+    kind: rule
+  - question: Is it binding without exceptions, though no tool can enforce it?
+    kind: working-agreement
+  - question: Is it a default with a reason?
+    kind: guideline
+  - question: Is it a value that guides judgment?
+    kind: principle

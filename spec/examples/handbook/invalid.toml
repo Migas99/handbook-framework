@@ -1,0 +1,7 @@
+# Invalid: the prefix has a capital letter and a space, the version is not semantic, and owner is not a
+# field of [handbook].
+[handbook]
+name = "Example Company"
+prefix = "Example Co"
+framework = "1.0"
+owner = "someone"

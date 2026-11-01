@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "title": "Common definitions",
+  "description": "Patterns shared by the other schemas.",
+  "$defs": {
+    "code": {
+      "description": "A domain code, a slug or a prefix: lowercase letters, digits and single hyphens, starting with a letter.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "id": {
+      "description": "An item's ID: <domain>.<slug>.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*\\.[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "ids": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/id"},
+      "uniqueItems": true
+    },
+    "version": {
+      "description": "A framework version, in semantic versioning.",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

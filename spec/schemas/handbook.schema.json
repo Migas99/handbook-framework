@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "handbook.schema.json",
+  "title": "handbook.toml",
+  "description": "A handbook's configuration. Rules that span files, such as extension codes not reusing a framework or reserved code, are enforced by handbook check.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["handbook"],
+  "properties": {
+    "handbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "prefix", "framework"],
+      "properties": {
+        "name": {"description": "The name people and agents read.", "$ref": "common.schema.json#/$defs/text"},
+        "prefix": {"description": "The start of every generated skill name.", "$ref": "common.schema.json#/$defs/code"},
+        "framework": {"description": "The pinned framework version; the only place it is written.", "$ref": "common.schema.json#/$defs/version"},
+        "download": {
+          "description": "Where the launcher downloads releases from, with the placeholders {version}, {os} and {arch}. A default applies when it is absent.",
+          "type": "string",
+          "allOf": [{"pattern": "\\{version\\}"}, {"pattern": "\\{os\\}"}, {"pattern": "\\{arch\\}"}]
+        }
+      }
+    },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "description": "The standard domains turned on. Core domains are always on.",
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/code"},
+          "uniqueItems": true
+        },
+        "extensions": {
+          "description": "The handbook's own domains.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "family", "definition", "belongs_when"],
+            "properties": {
+              "code": {"$ref": "common.schema.json#/$defs/code"},
+              "family": {"enum": ["practice", "system"]},
+              "definition": {"$ref": "common.schema.json#/$defs/text"},
+              "belongs_when": {"$ref": "common.schema.json#/$defs/text"}
+            }
+          }
+        }
+      }
+    },
+    "core": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "warn_above_words": {"description": "When handbook check warns about the size of the always-on core.", "type": "integer", "minimum": 1}
+      }
+    }
+  }
+}
