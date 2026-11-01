@@ -1,0 +1,37 @@
+name: Task
+description: A concrete change in this repository.
+labels: [task]
+projects: ["Migas99/2"]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Why this change is needed. Link the parent feature if there is one.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: What will change.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Observable conditions that make this done, as a checklist.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Parent feature, decision records and related issues.
