@@ -146,6 +146,7 @@ without a number. Each record has a status (`proposed`, `accepted`, `superseded 
 
 - A decision is proposed in a pull request that closes its issue; merging it makes it `accepted`.
 - An accepted record is never edited. A new record supersedes it, and the old one names its successor.
+- [`docs/adr/README.md`](docs/adr/README.md) lists every record with its status.
 
 ## Closing without a merge
 - Work that will not be done: close as **not planned**, with a comment saying why.

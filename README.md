@@ -12,6 +12,9 @@ Pre-release: nothing is released yet, and the first versions are `0.x`. Work is 
 [issues](https://github.com/Migas99/handbook-framework/issues) and on the
 [project](https://github.com/users/Migas99/projects/2).
 
+## Documentation
+Why the framework is designed the way it is: the [decision records](docs/adr/README.md).
+
 ## Contributing
 How this project works, from issue to merge: [CONTRIBUTING.md](CONTRIBUTING.md). To report a
 vulnerability: [SECURITY.md](SECURITY.md).
